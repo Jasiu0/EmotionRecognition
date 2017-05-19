@@ -13,4 +13,4 @@ python --version 2>NUL
 if errorlevel 1 echo Python installed:                 Fail && exit /b
 echo Python installed:               Pass
 
-Python ControlPreparationOfDataSet.py %pathToDirectoryWithEmotionTags% %pathToDirectoryWithPhotos% %pathToDestinationDirectory%
+Python PrepareToCreateDataSet.py %pathToDirectoryWithEmotionTags% %pathToDirectoryWithPhotos% %pathToDestinationDirectory%

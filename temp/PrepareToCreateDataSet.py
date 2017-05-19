@@ -1,6 +1,6 @@
 import sys
 import os
-class ControlPreparationOfDataSet():
+class PrepareToCreateDataSet():
 
 	# Sprawdzenie bibliotek 
 	def checkLibaries(self):
@@ -87,6 +87,8 @@ class ControlPreparationOfDataSet():
 		# Testy
 		self.checkLibaries()
 		self.checkArguments()
+		organizeDataSetController = organizeDataSet()
+		organizeDataSetController.run(pathToDirectoryWithEmotionTags, pathToDirectoryWithPhotos, pathToDestinationDirectory)
 		
-control = ControlPreparationOfDataSet()
-control.run()
+prepareDataSetController = PrepareToCreateDataSet()
+prepareDataSetController.run()
