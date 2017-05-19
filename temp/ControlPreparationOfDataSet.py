@@ -5,8 +5,8 @@ class ControlPreparationOfDataSet():
 	# Sprawdzenie bibliotek 
 	def checkLibaries(self):
 		# Stale
-		dlibCheck ='Dlib installed:'
-		openCvCheck = 'OpenCv installed:'
+		dlibCheck ='dlib installed:'
+		openCvCheck = 'Cv2 installed:'
 		globCheck = 'glob installed:'
 		shutilCheck = 'shutil installed:'		
 		print "\nChecking libraries"
@@ -33,7 +33,7 @@ class ControlPreparationOfDataSet():
 			result = True
 		except:
 			result = False
-		self.checkResult(dlibCheck,result)
+		self.checkResult(globCheck,result)
 		
 		# Copy	
 		try:
@@ -41,7 +41,7 @@ class ControlPreparationOfDataSet():
 			result = True
 		except:
 			result = False
-		self.checkResult(dlibCheck,result)
+		self.checkResult(shutilCheck,result)
 		
 	
 	# Sprawdzanie przeslanych argumentow
@@ -62,8 +62,8 @@ class ControlPreparationOfDataSet():
 		self.checkResult(pathToDirectoryWithEmotionTagsCheck,True) if(os.path.isdir(pathToDirectoryWithEmotionTags)) \
 		else self.checkResult(pathToDirectoryWithEmotionTagsCheck,False)
 		
-		pathToDirectoryWithPhotosCheck = sys.argv[2]
-		self.checkResult(pathToDirectoryWithPhotos,True) if(os.path.isdir(pathToDirectoryWithPhotos)) \
+		pathToDirectoryWithPhotos = sys.argv[2]
+		self.checkResult(pathToDirectoryWithPhotosCheck,True) if(os.path.isdir(pathToDirectoryWithPhotos)) \
 		else self.checkResult(pathToDirectoryWithPhotosCheck,False)
 		
 		pathToDestinationDirectory = sys.argv[3]
@@ -85,7 +85,7 @@ class ControlPreparationOfDataSet():
 	def run(self):	
 		
 		# Testy
-		#self.checkLibaries()
+		self.checkLibaries()
 		self.checkArguments()
 		
 control = ControlPreparationOfDataSet()
