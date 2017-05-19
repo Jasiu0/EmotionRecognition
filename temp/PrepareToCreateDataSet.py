@@ -58,18 +58,30 @@ class PrepareToCreateDataSet():
 		else self.checkResult(argumentsNumberCheck,False)
 
 		# Sprawdzenie istnienia sciezek dostepu
-		pathToDirectoryWithEmotionTags = sys.argv[1]
-		self.checkResult(pathToDirectoryWithEmotionTagsCheck,True) if(os.path.isdir(pathToDirectoryWithEmotionTags)) \
-		else self.checkResult(pathToDirectoryWithEmotionTagsCheck,False)
+		self.pathToDirectoryWithEmotionTags = sys.argv[1]
+		#self.checkResult(pathToDirectoryWithEmotionTagsCheck,True) if(os.path.isdir(pathToDirectoryWithEmotionTags)) \
+		#else self.checkResult(pathToDirectoryWithEmotionTagsCheck,False)
 		
-		pathToDirectoryWithPhotos = sys.argv[2]
-		self.checkResult(pathToDirectoryWithPhotosCheck,True) if(os.path.isdir(pathToDirectoryWithPhotos)) \
-		else self.checkResult(pathToDirectoryWithPhotosCheck,False)
+		self.pathToDirectoryWithPhotos = sys.argv[2]
+		#self.checkResult(pathToDirectoryWithPhotosCheck,True) if(os.path.isdir(pathToDirectoryWithPhotos)) \
+		#else self.checkResult(pathToDirectoryWithPhotosCheck,False)
 		
-		pathToDestinationDirectory = sys.argv[3]
-		self.checkResult(pathToDestinationDirectoryCheck,True) if(os.path.isdir(pathToDestinationDirectory)) \
-		else self.checkResult(pathToDestinationDirectoryCheck,False)
+		self.pathToDestinationDirectory = sys.argv[3]
+		#self.checkResult(pathToDestinationDirectoryCheck,True) if(os.path.isdir(pathToDestinationDirectory)) \
+		#else self.checkResult(pathToDestinationDirectoryCheck,False)
+	
+	def checkClasses(self):	
+		OrganizeDataSetClass = 'Organize Data Set Class:'
+		print '\nChecking Classes'
+		# Organize Data Set Class	
+		try:
+			from OrganizeDataSet import OrganizeDataSet
+			result = True
+		except:
+			result = False
+		self.checkResult(OrganizeDataSetClass,result)
 		
+
 		
 	# Wyswietlanie wyniku testu	
 	def checkResult(self, testName, flag):
@@ -85,10 +97,12 @@ class PrepareToCreateDataSet():
 	def run(self):	
 		
 		# Testy
-		self.checkLibaries()
+		#self.checkLibaries()
 		self.checkArguments()
-		organizeDataSetController = organizeDataSet()
-		organizeDataSetController.run(pathToDirectoryWithEmotionTags, pathToDirectoryWithPhotos, pathToDestinationDirectory)
+		self.checkClasses()
+		from OrganizeDataSet import OrganizeDataSet
+		organizeDataSetController = OrganizeDataSet()
+		organizeDataSetController.run(self.pathToDirectoryWithEmotionTags, self.pathToDirectoryWithPhotos, self.pathToDestinationDirectory)
 		
 prepareDataSetController = PrepareToCreateDataSet()
 prepareDataSetController.run()

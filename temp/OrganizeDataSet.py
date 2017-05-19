@@ -2,7 +2,7 @@ import glob
 from shutil import copy
 
 class OrganizeDataSet():
-	def organize():
+	def organize(self):
 		# Sciezka do zbioru z badanymi emocjami, zdjeciami i docelowa
 		pathEmotions = "C:\Ck-dataset-emotions\Emotion"
 		pathPhotos = "C:\Ck-dataset\cohn-kanade-images"
@@ -41,5 +41,5 @@ class OrganizeDataSet():
 		self.pathToDirectoryWithEmotionTags = pathToDirectoryWithEmotionTags
 		self.pathToDirectoryWithPhotos = pathToDirectoryWithPhotos
 		self.pathToDestinationDirectory = pathToDestinationDirectory
-		
+		self.organize()
 		
