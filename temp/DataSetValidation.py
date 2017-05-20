@@ -68,10 +68,12 @@ class DataSetValidation():
 		self.checkResult(pathToDirectoryWithEmotionTagsCheck,True) if(os.path.isdir(self.pathToDirectoryWithEmotionTags)) \
 		else self.checkResult(pathToDirectoryWithEmotionTagsCheck,False)
 		
+		# Sprawdzenie dostepu do sciezki z zdjeciami
 		self.pathToDirectoryWithPhotos = sys.argv[2]
 		self.checkResult(pathToDirectoryWithPhotosCheck,True) if(os.path.isdir(self.pathToDirectoryWithPhotos)) \
 		else self.checkResult(pathToDirectoryWithPhotosCheck,False)
 		
+		# Sprawdzenie istnienia sciezki docelowej
 		self.pathToDestinationDirectory = sys.argv[3]
 		self.checkResult(pathToDestinationDirectoryCheck,True) if(os.path.isdir(self.pathToDestinationDirectory)) \
 		else self.checkResult(pathToDestinationDirectoryCheck,False)
