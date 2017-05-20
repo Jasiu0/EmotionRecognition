@@ -55,7 +55,7 @@ class PrepareToCreateDataSet():
 		pathToNormalizeDirectoryCheck = 'Destinantion to Normalize'
 		LibraryToNormalizeCheck = 'Library to Normalize with'
 		HaarCascadeCheck = 'Directory with Haar Cascades:'
-		HaarCadadeNames = ['haarcascade_frontalface_default', 'haarcascade_frontalface_alt2', \
+		self.HaarCadadeNames = ['haarcascade_frontalface_default', 'haarcascade_frontalface_alt2', \
 		'haarcascade_frontalface_alt', 'haarcascade_frontalface_alt_tree']
 		print '\nChecking arguments'
 		
@@ -95,7 +95,7 @@ class PrepareToCreateDataSet():
 			# Sprawdzenie dostepu do kaskad Haar'a
 			checkHaarCasade = True
 			self.HaarCascadesDirectory = sys.argv[7]
-			for haarCascade in HaarCadadeNames:
+			for haarCascade in self.HaarCadadeNames:
 				if not os.path.isfile(self.HaarCascadesDirectory + '\\' + haarCascade + '.xml'):
 					checkHaarCasade = False
 			self.checkResult(HaarCascadeCheck,True) if(checkHaarCasade == True) \
@@ -131,7 +131,7 @@ class PrepareToCreateDataSet():
 			result = True
 		except:
 			result = False
-		self.checkResult(NormalizeDataSetClass,result)
+		#self.checkResult(NormalizeDataSetClass,result)
 
 		
 	# Wyswietlanie wyniku testu	
@@ -152,14 +152,19 @@ class PrepareToCreateDataSet():
 		self.checkArguments()
 		self.checkClasses()
 		from OrganizeDataSet import OrganizeDataSet
+		# Organizacja zbioru
 		organizeDataSetController = OrganizeDataSet()
 		organizeDataSetController.run(self.pathToDirectoryWithEmotionTags, self.pathToDirectoryWithPhotos, self.pathToDestinationDirectory)
+		# Czyszczenie zbioru
 		from CleanNeutralDirectory import CleanNeutralDirectory
 		cleanNeutralDirectoryController = CleanNeutralDirectory()
 		cleanNeutralDirectoryController.run(self.pathToDestinationDirectory+ "\\neutral")
+		# Normalizacja zbioru
 		from NormalizeDataSet import NormalizeDataSet
 		normalizeDataSetController = NormalizeDataSet()
-		normalizeDataSetController.run()
+		normalizeDataSetController.run(self.pathToDestinationDirectory, self.pathToNormalizeDirectory, self.libraryToNormalize, \
+		self.HaarCascadesDirectory, self.HaarCadadeNames)
+		print '\nData Set prepared succesfully!'
 		
 prepareDataSetController = PrepareToCreateDataSet()
 prepareDataSetController.run()

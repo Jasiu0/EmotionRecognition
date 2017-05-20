@@ -1,5 +1,6 @@
 import glob
 from shutil import copy
+import os
 
 class OrganizeDataSet():
 	def organize(self):
@@ -9,6 +10,11 @@ class OrganizeDataSet():
 		# Licznik kopiowanych plikow
 		counter = [0, 0, 0, 0, 0, 0, 0, 0]
 
+		# Sprawdza czy sa odpowiednie foldery emocji, jak nie to je tworzy
+		for emotion in emotions:
+			if not os.path.exists(self.pathToDestinationDirectory + '\\' +emotion):
+				os.makedirs(self.pathToDestinationDirectory + '\\' +emotion)
+		
 		#  Zwraca liste uczestnikow
 		participants = glob.glob(self.pathToDirectoryWithEmotionTags + "\\*")
 

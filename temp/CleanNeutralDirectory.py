@@ -16,6 +16,7 @@ class CleanNeutralDirectory():
 			if last != participantIndex:
 				last =  participant[len(self.pathToNeutralDirectory)+1:-17]
 			else:
+				# Usun plik
 				os.remove(participant) 
 				counter += 1
 		print 'Deleted ' + str(counter) + ' files'
