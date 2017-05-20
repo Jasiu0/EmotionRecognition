@@ -3,15 +3,14 @@ from shutil import copy
 
 class OrganizeDataSet():
 	def organize(self):
-		# Sciezka do zbioru z badanymi emocjami, zdjeciami i docelowa
-		pathEmotions = "C:\Ck-dataset-emotions\Emotion"
-		pathPhotos = "C:\Ck-dataset\cohn-kanade-images"
-		pathDestination = "C:\organizedDataSet"
 
 		# Zdefiniowanie emocji
 		emotions = ["neutral", "anger", "contempt", "disgust", "fear", "happy", "sadness", "surprise"]
+		# Licznik kopiowanych plikow
+		counter = [0, 0, 0, 0, 0, 0, 0, 0]
+
 		#  Zwraca liste uczestnikow
-		participants = glob.glob(pathEmotions + "\\*")
+		participants = glob.glob(self.pathToDirectoryWithEmotionTags + "\\*")
 
 		# Dla kazdego uczestnika
 		for participant in participants:
@@ -20,26 +19,34 @@ class OrganizeDataSet():
 				# Dla Plikow w folderze z emocjami
 				for files in glob.glob(participantEmotions + "\\*"):
 					# Zwraca obecna sciezke bez path
-					folder = files[len(pathEmotions)+1:-30]
+					folder = files[len(self.pathToDirectoryWithEmotionTags)+1:-30]
 					# tworz plik txt
 					file = open(files, 'r')
 					# odczytanie emocji
 					emotion = int(float(file.readline()))
 					# sciezka do ostatniego zdjecia w danym folderze (skrajna emocja)
-					sourceEmotion = glob.glob(pathPhotos + "\\" + folder + "\\*")[-1]
+					sourceEmotion = glob.glob(self.pathToDirectoryWithPhotos + "\\" + folder + "\\*")[-1]
 					# sciezka do pierwszego zdjecia w danym folderze (neutralna emocja)
-					sourceNeutral = glob.glob(pathPhotos + "\\" + folder + "\\*")[0]  # do same for neutral image
+					sourceNeutral = glob.glob(self.pathToDirectoryWithPhotos + "\\" + folder + "\\*")[0]  # do same for neutral image
 					# sciezka do kopiowania danego pliku z naturalna emocja
-					destinationNeutral = pathDestination + "\\neutral"
+					destinationNeutral = self.pathToDestinationDirectory + "\\neutral"
 					# sciezka do kopiowania danego pliku z skrajna emocja
-					destinationEmotion = pathDestination + "\\" + emotions[emotion]
+					destinationEmotion = self.pathToDestinationDirectory + "\\" + emotions[emotion]
 					# kopiowanie plikow
-					copy(sourceNeutral, destinationNeutral)
-					copy(sourceEmotion, destinationEmotion)
-
+					#copy(sourceNeutral, destinationNeutral)
+					#copy(sourceEmotion, destinationEmotion)
+					counter[0] += 1
+					counter[emotion] += 1
+		emotionIndex = 0
+		for emotion in emotions:
+			print "Copied " + str(counter[emotionIndex]) + " " + emotion + " photos" 
+			emotionIndex += 1
+		
+					
 	def run(self, pathToDirectoryWithEmotionTags, pathToDirectoryWithPhotos, pathToDestinationDirectory):
 		self.pathToDirectoryWithEmotionTags = pathToDirectoryWithEmotionTags
 		self.pathToDirectoryWithPhotos = pathToDirectoryWithPhotos
 		self.pathToDestinationDirectory = pathToDestinationDirectory
+		print "\nStarting Organizing DataSet"
 		self.organize()
 		
