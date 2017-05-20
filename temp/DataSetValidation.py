@@ -1,6 +1,6 @@
 import sys
 import os
-class PrepareToCreateDataSet():
+class DataSetValidation():
 
 	# Sprawdzenie bibliotek 
 	def checkLibaries(self):
@@ -166,5 +166,5 @@ class PrepareToCreateDataSet():
 		self.HaarCascadesDirectory, self.HaarCadadeNames)
 		print '\nData Set prepared succesfully!'
 		
-prepareDataSetController = PrepareToCreateDataSet()
-prepareDataSetController.run()
+DataSetValidationController = DataSetValidation()
+DataSetValidationController.run()

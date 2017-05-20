@@ -1,6 +1,7 @@
 import os
 import glob
 import cv2
+import dlib
 
 class NormalizeDataSet():
 	def normalize(self):
@@ -16,6 +17,9 @@ class NormalizeDataSet():
 				# Zapisanie klasyfikatorow Haar'a
 				haarCascadeTemp = cv2.CascadeClassifier(self.HaarCascadesDirectory + '\\' + haarCascade + '.xml')
 				self.HaarCascades.append(haarCascadeTemp)
+		# Sprawdzenie czy uzywane detektor Dlib
+		if(self.libraryToNormalize == 'Dlib'):
+			self.detector = dlib.get_frontal_face_detector()
 		
 		self.fileIndex = 0
 		# Sprawdza czy sa odpowiednie foldery emocji, jak nie to je tworzy
@@ -32,7 +36,7 @@ class NormalizeDataSet():
 				if(self.libraryToNormalize == 'OpenCv'):
 					self.detectFaceOpenCv(photo, frame, gray, emotion)
 				else:
-					self.detectFaceDlib()
+					self.detectFaceDlib(photo, frame, gray, emotion)
 		emotionIndex = 0
 		for emotion in self.emotions:
 			print "Resized " + str(self.counter[emotionIndex]) + " " + emotion + " photos" 
@@ -49,11 +53,24 @@ class NormalizeDataSet():
 		else:
 			# Dla twarzy uzysaj punkt zaczepienia oraz szerokosc i wysokosc
 			for (xCoordinate, yCoordinate, width, height) in face:
-				frame = frame[yCoordinate:yCoordinate + height, xCoordinate:xCoordinate + width] #Cut the frame to size
+				frame = frame[yCoordinate:yCoordinate + height, xCoordinate:xCoordinate + width]
 				self.safeFile(frame, emotion, file)
 				
-	def detectFaceDlib(self):
-		print 'yo'
+	def detectFaceDlib(self, photo, frame, gray, emotion):
+		file = photo[len(self.pathToDestinationDirectory + '\\' +emotion)+1:-4]
+		clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        # Zwiekszenie kontrastu
+		clahePhoto = clahe.apply(gray)
+		# Detekcja za pomoca wbudowanego klasyfikator Dlib
+		detections = self.detector(clahePhoto, 1)
+
+		for index,coordinates in  enumerate(detections):
+			coordinatesRight = coordinates.right()
+			coordinatesLeft = coordinates.left()
+			coordinatesTop = coordinates.top()
+			coordinatesBottom = coordinates.bottom()
+			frame = frame[coordinatesTop:coordinatesBottom, coordinatesLeft:coordinatesRight]
+			self.safeFile(frame, emotion, file)
 	
 	def safeFile(self, frame, emotion, file):
 		try:
