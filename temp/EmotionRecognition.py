@@ -2,6 +2,8 @@ import glob
 import cv2
 import dlib
 import numpy
+import math
+from sklearn.svm import SVC
 
 class EmotionRecognition():
 
@@ -23,11 +25,39 @@ class EmotionRecognition():
 		self.outputStreamDirectory = outputStreamDirectory
 		# inicjacja detectora dlib
 		self.detector = dlib.get_frontal_face_detector()
+		clf = SVC(kernel='linear', probability=True,tol=1e-3) 
 		
 		print '\nStarting Training'
 		trainingData, trainingLabels = self.makeTeachingSet()
+		npar_train = numpy.array(trainingData)  # Turn the training set into a numpy array for the classifier
+		npar_trainlabs = numpy.array(trainingLabels)
+		print("training SVM linear %s" % 0)  # train SVM
+		clf.fit(npar_train, trainingLabels)
 		print 'Training Finished'
-		
+		video_capture = cv2.VideoCapture(0)
+		while True:		
+			age = raw_input("Your age? ")
+			#image = cv2.imread(age)
+			ret, image = video_capture.read()
+							# Konwersja na skale szarosci
+			gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+			clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+					# Zwiekszenie kontrastu
+			clahePhoto = clahe.apply(gray)
+					# Otrzymaj punkty charakterystyczne
+			normalizedFeaturePoints = self.getFeaturePoints(clahePhoto)
+			if normalizedFeaturePoints == "No face detected":
+				pass
+			else:
+				pred_data = []
+				pred_data.append(normalizedFeaturePoints)
+				#print pred_data
+				im = numpy.array(pred_data)
+				pred = clf.predict_proba(im)
+				#pred = clf.predict(im,0)
+
+			print pred
+	
 	def runResearch(self):
 		print 'Reasearch'
 		
@@ -47,7 +77,8 @@ class EmotionRecognition():
 				clahePhoto = clahe.apply(gray)
 				# Otrzymaj punkty charakterystyczne
 				normalizedFeaturePoints = self.getFeaturePoints(clahePhoto)
-				if normalizedFeaturePoints == "error":
+				#print 'norm' + str(normalizedFeaturePoints)
+				if normalizedFeaturePoints == "No face detected":
 					pass
 				else:
 					# Dodawanie listy znormalizowanych punktow kontrolnych do zbioru
@@ -78,35 +109,44 @@ class EmotionRecognition():
 			xMean = numpy.mean(xList)
 			yMean = numpy.mean(yList)
 			# Oblicz odleglosc pomiedzy punktem a srodkiem ciezkosci dla kazdego z punktow w obu osiach
-			xCentral = [(x - xMean) for x in xList]
-			yCentral = [(y - yMean) for y in yList]
+			xMeanDistance = [(x - xMean) for x in xList]
+			yMeanDistance = [(y - yMean) for y in yList]
+			# Jezeli punkty w osi x nosa sa w jednej osi kat wynosi 0, w innym przypadku liczymy kat
+			print xList[26]
+			print xList[29]
+			print yList[26]
+			print yList[29]
+			if xList[26] == xList[29]:
+				print '0'
+				noseAngle = 0
+			else:
+				print ' '
+				# int?
+				noseAngle =  math.degrees(math.atan((yList[26] - yList[29]) / (xList[26] - xList[29])))
 
-			#if xlist[26] == xlist[
-		#		29]:  # If x-coordinates of the set are the same, the angle is 0, catch to prevent 'divide by 0' error in function
-		#		anglenose = 0
-		#	else:
-		#		anglenose = int(math.atan((ylist[26] - ylist[29]) / (xlist[26] - xlist[29])) * 180 / math.pi)
-#
-#			if anglenose < 0:
-#				anglenose += 90
-#			else:
-#				anglenose -= 90
-#
-#			landmarks_vectorised = []
-#			for x, y, w, z in zip(xcentral, ycentral, xlist, ylist):
-#				landmarks_vectorised.append(x)
-#				landmarks_vectorised.append(y)
-#				meannp = np.asarray((ymean, xmean))
-#				coornp = np.asarray((z, w))
-#				dist = np.linalg.norm(coornp - meannp)
-#				anglerelative = (math.atan((z - ymean) / (w - xmean)) * 180 / math.pi) - anglenose
-#				landmarks_vectorised.append(dist)
-#				landmarks_vectorised.append(anglerelative)
+			if noseAngle < 0:
+				noseAngle += 90
+			else:
+				noseAngle -= 90
 
-#		if len(detections) < 1:
-#			landmarks_vectorised = "error"
-		landmarks_vectorised =[]
-		return landmarks_vectorised
+			normalizedFeaturePoints = []
+			for w, z in zip(xList, yList):
+				normalizedFeaturePoints.append(x)
+				normalizedFeaturePoints.append(y)
+				meannp = numpy.asarray((yMean, xMean))
+				#print 'mean: ' +str(meannp)
+				coornp = numpy.asarray((z, w))
+				#print 'coor:'+ str(coornp)
+				dist = numpy.linalg.norm(coornp - meannp)
+				#print 'distance ' + str(dist)
+				anglerelative = math.degrees(math.atan((z - yMean) / (w - xMean))) - noseAngle
+				normalizedFeaturePoints.append(dist)
+				normalizedFeaturePoints.append(anglerelative)
+
+		# W przypadku nie znalezienia twarzy zwracamy komunikat bledu
+		if len(detections) < 1:
+			normalizedFeaturePoints = "No face detected"
+		return normalizedFeaturePoints
 		
 		
 	def run(self):

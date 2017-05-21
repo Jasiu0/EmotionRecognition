@@ -43,7 +43,9 @@ def get_landmarks(image):
             anglenose -= 90
 
         landmarks_vectorised = []
+		print 'xcent:' +str(xcentral[1])
         for x, y, w, z in zip(xcentral, ycentral, xlist, ylist):
+			print 'x:' +str(xcentral[1])
             landmarks_vectorised.append(x)
             landmarks_vectorised.append(y)
             meannp = np.asarray((ymean, xmean))
