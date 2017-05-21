@@ -9,7 +9,7 @@ class EmotionRecognitionValidation():
 		programModeCheck = 'Program mode:'
 		imageSourceCheck = 'Image Source:'
 		imageAcquisitionCycleCheck = 'Image Acquisition Cycle:'
-		predictorCheck = 'Precidtor:'
+		predictorCheck = 'Predictor:'
 		pathToDataSetCheck = 'Path To Data Set'
 		classifierCheck = 'Classifier:'
 		emotionsCheck = 'Emotions:'
@@ -107,12 +107,15 @@ class EmotionRecognitionValidation():
 		# Testy
 		#self.checkLibaries()
 		self.checkArguments()
-		self.checkClasses()
+		#self.checkClasses()
 		
 		# Rozpoznawanie emocji
 		from EmotionRecognition import EmotionRecognition
 		EmotionRecognitionController = EmotionRecognition()
-		EmotionRecognitionController.run()
+		
+		
+		EmotionRecognitionController.runFixed(self.imageSource, self.predictor, \
+		self.pathToDataSet, self.classifier, self.emotions, self.showImage, self.showFeaturePoints, self.outputStream, self.outputStreamDirectory)
 		
 EmotionRecognitionValidationController = EmotionRecognitionValidation()
 EmotionRecognitionValidationController.run()
