@@ -2,7 +2,7 @@
 :: Wybor trybu dzialania [continuous, fixed, research] 
 SET programMode=fixed
 :: Wybor zrodla obrazu [camera, file, directory]
-SET imageSource=file
+SET imageSource=camera
 :: Czas pomiedzy pobieraniem ramek (int) Brane pod uwage tylko przy wyborze zrodla obrazu z kamery
 SET imageAcquisitionCycle=10
 :: Podaj bezwgledna sciezke do predykatora Dlib
@@ -12,7 +12,8 @@ SET pathToDataSet=C:\cutDataSet
 :: Wybierz klasyfikator [linear, polynomial, rbf]
 SET classifier=linear
 :: Wybor emocji ["anger", "contempt", "disgust", "fear", "happy", "neutral", "sadness", "surprise"]
-SET emotions=[\"anger\",\"contempt\",\"disgust\",\"fear\",\"happy\",\"neutral\",\"sadness\",\"surprise\"]
+::SET emotions=[\"anger\",\"contempt\",\"disgust\",\"fear\",\"happy\",\"neutral\",\"sadness\",\"surprise\"]
+SET emotions=[\"happy\",\"neutral\"]
 :: Wyswietlanie obrazu [True, False]
 SET showImage=True
 :: Wyswietlanie znacznikow [True, False] ( dziala w przypadku wybrania wyswietlania obrazu)

@@ -36,9 +36,11 @@ class EmotionRecognitionValidation():
 		
 		# Sprawdzenie poprawnego odstepu pomiedzy pobieraniem ramek
 		if(self.imageSource == 'camera'):
-			self.sourcePeriod = sys.argv[3]
-			self.checkResult(imageAcquisitionCycleCheck,True) if self.sourcePeriod.isdigit()  \
+			self.imageAcquisitionCycle = sys.argv[3]
+			self.checkResult(imageAcquisitionCycleCheck,True) if self.imageAcquisitionCycle.isdigit()  \
 			else self.checkResult(imageAcquisitionCycleCheck,False)
+		else:
+			self.Period= ''
 
 		# Sprawdzenie istnienia predykatora
 		self.predictor = sys.argv[4]
@@ -71,7 +73,9 @@ class EmotionRecognitionValidation():
 		if self.showImage == 'True':
 			self.checkResult(showFeaturePointsCheck,True) if(self.showFeaturePoints in ['True', 'False']) \
 			else self.checkResult(showFeaturePointsCheck,False)
-			
+		else:
+			self.showImage = ''
+		
 		self.outputStream = sys.argv[10]
 		self.checkResult(outputStreamCheck,True) if(self.outputStream in ['console', 'file']) \
 		else self.checkResult(outputStreamCheck,False)
@@ -113,8 +117,7 @@ class EmotionRecognitionValidation():
 		from EmotionRecognition import EmotionRecognition
 		EmotionRecognitionController = EmotionRecognition()
 		
-		
-		EmotionRecognitionController.runFixed(self.imageSource, self.predictor, \
+		EmotionRecognitionController.run(self.programMode, self.imageSource, self.imageAcquisitionCycle, self.predictor, \
 		self.pathToDataSet, self.classifier, self.emotions, self.showImage, self.showFeaturePoints, self.outputStream, self.outputStreamDirectory)
 		
 EmotionRecognitionValidationController = EmotionRecognitionValidation()
