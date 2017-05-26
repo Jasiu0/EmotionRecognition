@@ -35,12 +35,12 @@ class EmotionRecognitionValidation():
 		
 		
 		# Sprawdzenie poprawnego odstepu pomiedzy pobieraniem ramek
-		if(self.imageSource == 'camera'):
+		if(self.programMode == 'continuous'):
 			self.imageAcquisitionCycle = sys.argv[3]
 			self.checkResult(imageAcquisitionCycleCheck,True) if self.imageAcquisitionCycle.isdigit()  \
 			else self.checkResult(imageAcquisitionCycleCheck,False)
 		else:
-			self.Period= ''
+			self.imageAcquisitionCycle= ''
 
 		# Sprawdzenie istnienia predykatora
 		self.predictor = sys.argv[4]
@@ -54,7 +54,7 @@ class EmotionRecognitionValidation():
 		
 		# Sprawdzenie poprawnego wyboru klasyfikatora
 		self.classifier = sys.argv[6]
-		self.checkResult(classifierCheck,True) if self.classifier in ['linear', 'polynomial', 'rbf'] \
+		self.checkResult(classifierCheck,True) if self.classifier in ['linear', 'poly'] \
 		else self.checkResult(classifierCheck,False)
 		
 		# Sprawdzenie poprawnosci emocji
@@ -95,6 +95,112 @@ class EmotionRecognitionValidation():
 		except:
 			result = False
 		self.checkResult(EmotionRecognitionClass, result)	
+
+	# Sprawdzenie bibliotek 
+	def checkLibaries(self):
+		# Stale
+		dlibCheck ='dlib installed:'
+		openCvCheck = 'Cv2 installed:'
+		globCheck = 'glob installed:'
+		numpyCheck = 'numpy installed:'	
+		mathCheck = 'math  installed:'	
+		timeCheck = 'time installed:'	
+		datetimeCheck = 'datetime installed:'	
+		threadingCheck = 'threading installed:'	
+		ntpathCheck = 'ntpath installed:'	
+		randomCheck = 'random installed:'	
+		svcCheck = 'SVC installed:'	
+		
+		print "\nChecking libraries"
+		
+		# OpenCv
+		try:
+			import cv2
+			result = True
+		except:
+			result = False;
+		self.checkResult(openCvCheck,result)
+		
+		# Dlib	
+		try:
+			import dlib
+			result = True
+		except:
+			result = False
+		self.checkResult(dlibCheck,result)
+		
+		# Glob	
+		try:
+			import glob
+			result = True
+		except:
+			result = False
+		self.checkResult(globCheck,result)
+		
+		# Numpy
+		try:
+			import numpy
+			result = True
+		except:
+			result = False
+		self.checkResult(numpyCheck,result)
+		
+		# Math
+		try:
+			import math
+			result = True
+		except:
+			result = False
+		self.checkResult(mathCheck,result)
+
+		# Time
+		try:
+			import time
+			result = True
+		except:
+			result = False
+		self.checkResult(timeCheck,result)
+
+		# Copy	
+		try:
+			import datetime
+			result = True
+		except:
+			result = False
+		self.checkResult(datetimeCheck,result)
+		
+		# Copy	
+		try:
+			import threading
+			result = True
+		except:
+			result = False
+		self.checkResult(threadingCheck,result)
+		
+		# Copy	
+		try:
+			import ntpath
+			result = True
+		except:
+			result = False
+		self.checkResult(ntpathCheck,result)
+		
+		# Copy	
+		try:
+			import random
+			result = True
+		except:
+			result = False
+		self.checkResult(randomCheck,result)
+
+		# SVM	
+		try:
+			from sklearn.svm import SVC	
+			result = True
+		except:
+			result = False
+		self.checkResult(svcCheck,result)
+	
 		
 	# Wyswietlanie wyniku testu	
 	def checkResult(self, testName, flag):
@@ -109,9 +215,9 @@ class EmotionRecognitionValidation():
 
 	def run(self):
 		# Testy
-		#self.checkLibaries()
+		self.checkLibaries()
 		self.checkArguments()
-		#self.checkClasses()
+		self.checkClasses()
 		
 		# Rozpoznawanie emocji
 		from EmotionRecognition import EmotionRecognition

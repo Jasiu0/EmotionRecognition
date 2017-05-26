@@ -43,9 +43,9 @@ def get_landmarks(image):
             anglenose -= 90
 
         landmarks_vectorised = []
-		print 'xcent:' +str(xcentral[1])
+	#	print 'xcent:' +str(xcentral[1])
         for x, y, w, z in zip(xcentral, ycentral, xlist, ylist):
-			print 'x:' +str(xcentral[1])
+			#print 'x:' +str(xcentral[1])
             landmarks_vectorised.append(x)
             landmarks_vectorised.append(y)
             meannp = np.asarray((ymean, xmean))
@@ -142,14 +142,13 @@ while True:
     if landmarks_vectorised == "error":
         pass
     else:
-        pred_data = []
-        pred_data.append(landmarks_vectorised)
+		pred_data = []
+		pred_data.append(landmarks_vectorised)
         #print pred_data
-        im = np.array(pred_data)
-        pred = clf.predict_proba(im)
-        #pred = clf.predict(im,0)
-
-        print pred
-
+		im = np.array(pred_data)
+		pred = clf.predict_proba(im)
+		for prediction in pred:
+			for emotion in emotions:
+				print str(emotion) + ': ' + str(prediction[emotions.index(emotion)]) + '\n'
     if cv2.waitKey(60) & 0xFF == ord('q'):  # Exit program when the user presses 'q'
         break
